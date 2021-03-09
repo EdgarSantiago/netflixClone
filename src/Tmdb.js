@@ -64,6 +64,9 @@ export default {
                  case 'tv':
                     info = await basicFecth(`/tv/${movieId}?language=pt-BR&api_key=${API_KEY}`);
                 break;
+                default: 
+                info = null;
+                break;
             }
         }
 
