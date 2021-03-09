@@ -3,13 +3,15 @@ import Tmdb from './Tmdb';
 import MovieList from './components/movieLists/MovieList'
 import './App.css'
 import FeaturedMovie from './components/FeaturedMovie/FeaturedMovie'
+import Header from './components/Header/Header'
+import Footer from './components/Footer/Footer'
 
 
 export default () => {
 
   const [movieList, setMovieList] = useState([]);
   const [featuredData, setFeaturedData] = useState([]);
-
+  const [blackHeader, setblackHeader]= useState(true);
 
   useEffect(() => {
     const loadAll = async () => {
@@ -29,9 +31,28 @@ export default () => {
     loadAll();
   }, [])
 
+  useEffect(()=>{
+    const scrollListener = () =>{
+        if(window.scrollY > 10){
+          setblackHeader(true);
+        }else{
+          setblackHeader(false);
+        }
+    }
+
+    window.addEventListener('scroll', scrollListener);
+
+    return () =>{
+      window.removeEventListener('scroll', scrollListener);
+    }
+  }, []);
+
+  
+
   return(
     <div className="page">
 
+      <Header black={blackHeader}/>
       { featuredData && <FeaturedMovie item={featuredData}/>}
 
 
@@ -43,6 +64,18 @@ export default () => {
         ))
         }
       </section>
+      <Footer/>
+      
+      {movieList.length <= 0 &&
+      <div className="loading">
+        <img src="https://cdn.lowgif.com/small/0534e2a412eeb281-the-counterintuitive-tech-behind-netflix-s-worldwide.gif" alt="loading"></img>
+      </div>
+    }
+
+        
+
     </div>
+
+    
   )
 }
